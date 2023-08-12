@@ -6,19 +6,28 @@ def eva(o):
 
 set=[]
 path="C:\\"
-
+os.chdir(path)
 class TrojanHorse(Cmd):
     """just try try"""
 
-    prompt = "┌──(\x1b[38;2;255;0;0mhacker\x1b[0m)-[\x1b[38;2;16;150;220m"+path+"\x1b[0m]\n└─\x1b[38;2;255;0;0m#\x1b[0m "
-    intro = "Welcome to \x1b[38;2;16;150;220mHacker\x1b[0m cli tool"
+    prompt = "┌──(\x1b[38;2;255;0;0mskali\x1b[0m)-[\x1b[38;2;16;150;220m"+path+"\x1b[0m]\n└─\x1b[38;2;255;0;0m#\x1b[0m "
+    intro = "Welcome to \x1b[38;2;16;150;220mSkali\x1b[0m cli"
 
-    def do_exit(self):
+    def do_exit(self,argv):
         return True
     def do_cd(self,argv):
         global path
-        path=os.path.join(path,argv)
-        self.prompt = "┌──(\x1b[38;2;255;0;0mhacker\x1b[0m)-[\x1b[38;2;16;150;220m"+path+"\x1b[0m]\n └─\x1b[38;2;255;0;0m#\x1b[0m "
+        try:
+            path=os.path.abspath(argv)
+            os.chdir(path)
+            self.prompt = "┌──(\x1b[38;2;255;0;0mhacker\x1b[0m)-[\x1b[38;2;16;150;220m{}\x1b[0m]\n└─\x1b[38;2;255;0;0m#\x1b[0m ".format(path)
+        except FileNotFoundError as err:
+            print("\x1b[38;2;255;0;0mError\x1b[0m:",err)
+    def do_help(self,argv):
+        if(len(argv)):
+            eva("help "+argv)
+        else:
+            eva("help")
     def default(self,line):
         global set
         if line[-1]=="\\" or line[-1]=="^":
@@ -33,12 +42,13 @@ class TrojanHorse(Cmd):
             set=[]
         else:
             eva(line)
+        print("\n")
 
     def preloop(self):
         eva("cls")
 
     def postloop(self):
-        print("Exiting HackerTool")
+        print("Exiting Skali")
 
 
 if __name__ == "__main__":
